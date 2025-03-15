@@ -1,42 +1,51 @@
 "use client";
 import React, { useState } from "react";
+import { soumettreExamen } from "../../actions/soumettreExamen"; // Importez l'action côté serveur
+import { toast } from "react-toastify";
 
 const SoumettreExamen = () => {
   const [nomExamen, setNomExamen] = useState("");
   const [description, setDescription] = useState("");
   const [typeExamen, setTypeExamen] = useState("");
   const [dateLimite, setDateLimite] = useState("");
-  const [classes, setClasses] = useState<string[]>(["DUT1", "DST1", "DUT2", "DIC1", "DIC2", "DIC3"]); // État pour stocker les classes disponibles
-  const [selectedClasses, setSelectedClasses] = useState<string[]>([]); // État pour stocker les classes sélectionnées
-  const [nouvelleClasse, setNouvelleClasse] = useState(""); // État pour stocker la nouvelle classe
+  const [classes, setClasses] = useState<string[]>(["DUT1", "DST1", "DUT2", "DIC1", "DIC2", "DIC3"]);
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
+  const [nouvelleClasse, setNouvelleClasse] = useState("");
   const [fichier, setFichier] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
-      nomExamen,
-      description,
-      typeExamen,
-      dateLimite,
-      classes: selectedClasses, // Ajout des classes sélectionnées
-      fichier,
-    });
-    alert("Examen soumis avec succès !");
+
+    const formData = new FormData();
+    formData.append('nomExamen', nomExamen);
+    formData.append('description', description);
+    formData.append('typeExamen', typeExamen);
+    formData.append('dateLimite', dateLimite);
+    formData.append('classes', JSON.stringify(selectedClasses));
+    if (fichier) {
+      formData.append('fichier', fichier);
+    }
+
+    try {
+      const result = await soumettreExamen(formData); // Appeler l'action côté serveur
+      toast.success(result.message);
+    } catch (error) {
+      console.error('Erreur :', error);
+      alert('Erreur lors de la soumission de l\'examen');
+    }
   };
 
   const ajouterClasse = () => {
     if (nouvelleClasse.trim() !== "" && !classes.includes(nouvelleClasse)) {
       setClasses([...classes, nouvelleClasse]);
-      setNouvelleClasse(""); // Réinitialiser le champ de saisie
+      setNouvelleClasse("");
     }
   };
 
   const handleClassSelection = (classe: string) => {
     if (selectedClasses.includes(classe)) {
-      // Si la classe est déjà sélectionnée, on la retire
       setSelectedClasses(selectedClasses.filter((c) => c !== classe));
     } else {
-      // Sinon, on l'ajoute
       setSelectedClasses([...selectedClasses, classe]);
     }
   };
@@ -169,7 +178,7 @@ const SoumettreExamen = () => {
                     {/* Champ pour ajouter une nouvelle classe */}
                     <div className="sm:col-span-2">
                       <label htmlFor="nouvelleClasse" className="text-base font-medium text-gray-900">
-                        Ajouter une nouvelle classe
+                        Ajouter une nouvelle classe (si non présente)
                       </label>
                       <div className="mt-2.5 relative flex gap-2">
                         <input

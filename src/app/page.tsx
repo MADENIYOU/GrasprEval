@@ -24,7 +24,7 @@ export default function Home() {
               <a href="/Correction">Correction</a>
             </li>
             <li className="text-gray-200">
-              <a href="/SoumettreExamen" className="text-blue-700">Nouvel Examen</a>
+              <a href="/SoumettreExamen">Nouvel Examen</a>
             </li>
             <li>
               <a
@@ -67,7 +67,7 @@ export default function Home() {
           {/* Texte animé */}
           <ol className="list-inside list-decimal text-sm/6 text-left font-[family-name:var(--font-geist-mono)]">
             <div className="mb-2 tracking-[-.01em] text-lg">
-              <TypingAnimations text="Une plateforme conviviale de gestion d'examens de vos classes." delay={0.5} />
+              <TypingAnimations text="Une plateforme conviviale de gestion d'examens de vos classes." delay={0.5}/>
             </div>
             <div className="tracking-[-.01em] text-lg">
               <TypingAnimations text="Pour une gestion intelligente de vos notes c'est ici !" delay={1} />

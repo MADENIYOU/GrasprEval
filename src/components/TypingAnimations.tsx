@@ -19,7 +19,7 @@ const TypingAnimation = ({ text, delay = 0, duration = 0.1 }: TypingAnimationPro
   }, [text, delay]);
 
   return (
-    <div className="flex">
+    <div className="flex text-white">
       {text.split("").map((letter, index) => (
         <span
           key={index}
