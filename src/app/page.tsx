@@ -1,100 +1,108 @@
 import Image from "next/image";
+import TypingAnimations from "../components/TypingAnimations";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Une plateforme conviviale de gestion de classes
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Commençons.
-          </li>
-        </ol>
+    <div className="bg-gray-900 min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="w-full">
+        <nav className="items-center pt-5 px-4 mx-auto max-w-screen-xl sm:px-8 sm:flex sm:space-x-6">
+        <h1 className="text-white font-bold text-4xl xl:text-5xl">
+            <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text">
+              Graspr
+            </span>
+            <span className="text-white font-extrabold">
+              Eval
+            </span>
+          </h1>
+          <ul className="py-4 flex-1 items-center flex space-x-3 sm:space-x-6 sm:justify-end">
+            <li className="text-gray-200">
+              <a href="/Dashboard">Dashbord</a>
+            </li>
+            <li className="text-gray-200">
+              <a href="/Correction">Correction</a>
+            </li>
+            <li className="text-gray-200">
+              <a href="/SoumettreExamen">Nouvel Examen</a>
+            </li>
+            <li>
+              <a
+                href="/Connexion"
+                className="flex items-center text-gray-200"
+              >
+                Se connecter
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 ml-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="/Connexion"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Se connecter
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="/Inscription"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            S'inscrire
-          </a>
+      {/* Main Content */}
+      <section className="mt-24 mx-auto max-w-screen-xl pb-12 px-4 items-center lg:flex md:px-8 flex-1">
+        {/* Texte et boutons à gauche */}
+        <div className="space-y-4 flex-1 sm:text-center lg:text-left">
+          {/* GrasprEval avec animation */}
+          <h1 className="text-white font-bold text-4xl xl:text-5xl">
+            <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text">
+              Graspr
+            </span>
+            <span className="text-white font-extrabold">
+              Eval
+            </span>
+          </h1>
+
+          {/* Texte animé */}
+          <ol className="list-inside list-decimal text-sm/6 text-left font-[family-name:var(--font-geist-mono)]">
+            <div className="mb-2 tracking-[-.01em] text-lg">
+              <TypingAnimations text="Une plateforme conviviale de gestion d'examens de vos classes." delay={0.5} />
+            </div>
+            <div className="tracking-[-.01em] text-lg">
+              <TypingAnimations text="Pour une gestion intelligente de vos notes c'est ici !" delay={1} />
+            </div>
+          </ol>
+
+          {/* Boutons */}
+          <div className="pt-10 items-center justify-center space-y-3 sm:space-x-6 sm:space-y-0 sm:flex lg:justify-start">
+            <a
+              href="/Connexion"
+              className="px-7 py-3 w-full bg-white text-gray-800 text-center rounded-md shadow-md block sm:w-auto"
+            >
+              Se connecter
+            </a>
+            <a
+              href="/Inscription"
+              className="px-7 py-3 w-full bg-gray-700 text-gray-200 text-center rounded-md block sm:w-auto"
+            >
+              S'inscrire
+            </a>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="/Examen"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        {/* Image à droite */}
+        <div className="flex-1 text-center mt-7 lg:mt-0 lg:ml-3">
+          <img
+            src="https://i.postimg.cc/HxHyt53c/undraw-heatmap-uyye.png"
+            className="w-full mx-auto sm:w-10/12 lg:w-full"
+            alt="Illustration"
           />
-          Examens
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="/Dashboard"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Dashboard
-        </a>
-        {/* <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href=""
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a> */}
-      </footer>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer backgroundColor="bg-gray-900" />
     </div>
   );
 }

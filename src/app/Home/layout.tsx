@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../app/globals.css";
 import React from "react";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           Correction de Copies
         </nav>
         {children}
+        <footer>
+          <Footer 
+          backgroundColor="bg-gray-900" // Fond sombre
+          textColor="text-gray-300" // Texte clair
+          iconColor="text-gray-300"/>
+        </footer>
       </body>
     </html>
   );

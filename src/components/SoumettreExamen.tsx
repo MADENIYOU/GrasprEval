@@ -6,6 +6,9 @@ const SoumettreExamen = () => {
   const [description, setDescription] = useState("");
   const [typeExamen, setTypeExamen] = useState("");
   const [dateLimite, setDateLimite] = useState("");
+  const [classes, setClasses] = useState<string[]>(["DUT1", "DST1", "DUT2", "DIC1", "DIC2", "DIC3"]); // État pour stocker les classes disponibles
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]); // État pour stocker les classes sélectionnées
+  const [nouvelleClasse, setNouvelleClasse] = useState(""); // État pour stocker la nouvelle classe
   const [fichier, setFichier] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,23 +18,47 @@ const SoumettreExamen = () => {
       description,
       typeExamen,
       dateLimite,
+      classes: selectedClasses, // Ajout des classes sélectionnées
       fichier,
     });
     alert("Examen soumis avec succès !");
   };
 
-  return (
-    <section className="py-10 bg-gradient-to-r from-fuchsia-600 to-blue-600 sm:py-16 lg:py-24">
-      <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-            Soumettre un Examen
-          </h2>
-          <p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-white">
-            Remplissez le formulaire ci-dessous pour soumettre un nouvel examen.
-          </p>
-        </div>
+  const ajouterClasse = () => {
+    if (nouvelleClasse.trim() !== "" && !classes.includes(nouvelleClasse)) {
+      setClasses([...classes, nouvelleClasse]);
+      setNouvelleClasse(""); // Réinitialiser le champ de saisie
+    }
+  };
 
+  const handleClassSelection = (classe: string) => {
+    if (selectedClasses.includes(classe)) {
+      // Si la classe est déjà sélectionnée, on la retire
+      setSelectedClasses(selectedClasses.filter((c) => c !== classe));
+    } else {
+      // Sinon, on l'ajoute
+      setSelectedClasses([...selectedClasses, classe]);
+    }
+  };
+
+  return (
+    <div className="bg-gray-900 min-h-screen">
+      {/* Section du formulaire avec dégradé */}
+      <div className="bg-gray-900">
+        <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+          <div className="max-w-2xl mx-auto text-center pt-10 sm:pt-16 lg:pt-24">
+            <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+              Soumettre un Examen
+            </h2>
+            <p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-white">
+              Remplissez le formulaire ci-dessous pour soumettre un nouvel examen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Contenu principal avec fond noir */}
+      <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="max-w-6xl mx-auto mt-12 overflow-hidden bg-white rounded-md shadow-md lg:mt-20">
           <div className="grid items-stretch grid-cols-1 lg:grid-cols-5">
             <div className="lg:col-span-3">
@@ -116,6 +143,53 @@ const SoumettreExamen = () => {
                       </div>
                     </div>
 
+                    {/* Nouveau champ : Sélection des classes avec des cases à cocher */}
+                    <div className="sm:col-span-2">
+                      <label className="text-base font-medium text-gray-900">
+                        Classes concernées
+                      </label>
+                      <div className="mt-2.5 relative grid grid-cols-2 gap-2">
+                        {classes.map((classe) => (
+                          <div key={classe} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={classe}
+                              checked={selectedClasses.includes(classe)}
+                              onChange={() => handleClassSelection(classe)}
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            />
+                            <label htmlFor={classe} className="ml-2 text-sm text-gray-900">
+                              {classe}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Champ pour ajouter une nouvelle classe */}
+                    <div className="sm:col-span-2">
+                      <label htmlFor="nouvelleClasse" className="text-base font-medium text-gray-900">
+                        Ajouter une nouvelle classe
+                      </label>
+                      <div className="mt-2.5 relative flex gap-2">
+                        <input
+                          type="text"
+                          id="nouvelleClasse"
+                          value={nouvelleClasse}
+                          onChange={(e) => setNouvelleClasse(e.target.value)}
+                          placeholder="Entrez le nom de la nouvelle classe"
+                          className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                        />
+                        <button
+                          type="button"
+                          onClick={ajouterClasse}
+                          className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none"
+                        >
+                          Ajouter
+                        </button>
+                      </div>
+                    </div>
+
                     {/* Champ pour uploader le fichier */}
                     <div className="sm:col-span-2">
                       <label htmlFor="fichier" className="text-base font-medium text-gray-900">
@@ -190,7 +264,7 @@ const SoumettreExamen = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
