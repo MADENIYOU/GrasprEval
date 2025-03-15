@@ -28,7 +28,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link href="/Correction">Correction</Link>
             </li>
             <li className="text-gray-200">
-              <Link href="/SoumettreExamen">Nouvel Examen</Link>
+              <Link href="/SoumettreExamen" className="text-blue-700">Nouvel Examen</Link>
             </li>
           </ul>
         </nav>

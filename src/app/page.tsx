@@ -24,7 +24,7 @@ export default function Home() {
               <a href="/Correction">Correction</a>
             </li>
             <li className="text-gray-200">
-              <a href="/SoumettreExamen">Nouvel Examen</a>
+              <a href="/SoumettreExamen" className="text-blue-700">Nouvel Examen</a>
             </li>
             <li>
               <a
