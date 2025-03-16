@@ -48,10 +48,10 @@ const Sidebar = ({ classes }: SidebarProps) => {
               <Link href="/Dashboard">Dashboard</Link>
             </li>
             <li className="text-gray-200">
-              <Link href="/Correction">Correction</Link>
+              <Link href="/Correction" className="text-blue-700">Correction</Link>
             </li>
             <li className="text-gray-200">
-              <Link href="/SoumettreExamen" className="text-blue-700">Nouvel Examen</Link>
+              <Link href="/SoumettreExamen" >Nouvel Examen</Link>
             </li>
           </ul>
         </nav>
