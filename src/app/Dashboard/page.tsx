@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Overview } from "@/components/templates/dashboard/Overview";
 import { useEffect, useState } from "react";
 import { getDashboardData } from "../api/dashboard/dashboardService";
+import { BarChartVertical } from "@/components/BarChartVertical";
 
 export default function DashboardPage() {
   const [classesCount, setClassesCount] = useState<number | null>(null);
@@ -113,7 +114,7 @@ export default function DashboardPage() {
             <CardTitle>Overview</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
-            <Overview />
+            <BarChartVertical />
           </CardContent>
         </Card>
       </div>
