@@ -3,13 +3,34 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Overview } from "@/components/templates/dashboard/Overview";
+import { useEffect, useState } from "react";
+import { getDashboardData } from "../api/dashboard/dashboardService";
 
 export default function DashboardPage() {
+  const [classesCount, setClassesCount] = useState<number | null>(null);
+  const [examsCount, setExamsCount] = useState<number | null>(null);
+  const [studentsCount, setStudentsCount] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/dashboard") // Appeler l'API route
+      .then((response) => response.json())
+      .then((data) => {
+        setClassesCount(data.classesCount);
+        setExamsCount(data.examsCount);
+        setStudentsCount(data.studentsCount);
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la récupération des données :", err);
+        setError("Erreur lors de la récupération des données");
+      });
+  }, []);
+
   return (
     <div className="container">
-        <header className="w-full bg-gray-900">
+      <header className="w-full bg-gray-900">
         <nav className="items-center pt-5 px-4 mx-auto max-w-screen-xl sm:px-8 sm:flex sm:space-x-6">
-        <h1 className="text-white font-bold text-4xl xl:text-5xl">
+          <h1 className="text-white font-bold text-4xl xl:text-5xl">
             <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text">
               Graspr
             </span>
@@ -19,7 +40,7 @@ export default function DashboardPage() {
           </h1>
           <ul className="py-4 flex-1 items-center flex space-x-3 sm:space-x-6 sm:justify-end">
             <li className="text-gray-200">
-              <a href="/Dashboard" className="text-blue-700">Dashbord</a>
+              <a href="/Dashboard" className="text-blue-700">Dashboard</a>
             </li>
             <li className="text-gray-200">
               <a href="/Correction">Correction</a>
@@ -32,42 +53,54 @@ export default function DashboardPage() {
       </header>
       <h1 className="text-3xl font-bold mb-6 text-white">Dashboard</h1>
 
+      {error && (
+        <div className="text-red-500 mb-4">
+          {error}
+        </div>
+      )}
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* Carte 1 */}
+        {/* Carte 1 : Nombre de classes */}
         <Card>
           <CardHeader>
-            <CardTitle>Total Revenue</CardTitle>
+            <CardTitle>Classes</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">$45,231.89</p>
+            <p className="text-2xl font-bold">
+              {classesCount !== null ? classesCount : "Chargement..."}
+            </p>
             <p className="text-sm text-muted-foreground">
-              +20.1% from last month
+              Nombre total de classes
             </p>
           </CardContent>
         </Card>
 
-        {/* Carte 2 */}
+        {/* Carte 2 : Nombre d'examens */}
         <Card>
           <CardHeader>
-            <CardTitle>Subscriptions</CardTitle>
+            <CardTitle>Examens</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">+2350</p>
+            <p className="text-2xl font-bold">
+              {examsCount !== null ? examsCount : "Chargement..."}
+            </p>
             <p className="text-sm text-muted-foreground">
-              +180.1% from last month
+              Nombre total d'examens
             </p>
           </CardContent>
         </Card>
 
-        {/* Carte 3 */}
+        {/* Carte 3 : Nombre d'élèves */}
         <Card>
           <CardHeader>
-            <CardTitle>Sales</CardTitle>
+            <CardTitle>Élèves</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">+12,234</p>
+            <p className="text-2xl font-bold">
+              {studentsCount !== null ? studentsCount : "Chargement..."}
+            </p>
             <p className="text-sm text-muted-foreground">
-              +19% from last month
+              Nombre total d'élèves
             </p>
           </CardContent>
         </Card>

@@ -4,9 +4,9 @@ import Link from "next/link";
 interface ClassCardProps {
   id: string;
   name: string;
-  imageUrl: string; // Ajout de l'image
+  imageUrl: string;
   description: string;
-  redirectUrl: string; // URL de redirection
+  redirectUrl: string;
 }
 
 const ClassCard: React.FC<ClassCardProps> = ({

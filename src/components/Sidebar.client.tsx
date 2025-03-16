@@ -72,7 +72,7 @@ const Sidebar = ({ classes }: SidebarProps) => {
           <div className="absolute lg:relative lg:block w-[350px] lg:w-[256px] h-screen bg-gray-900 opacity-100 pt-5 pb-4">
             <div className="mt-6 mb-2 py-2 px-3">
               <nav className="grid gap-1.5">
-                <Link href="/Home" className="flex items-center hover:bg-[#1F2937] hover:text-white px-2.5 py-2 rounded-md font-medium text-lg text-gray-400">
+                <Link href="/" className="flex items-center hover:bg-[#1F2937] hover:text-white px-2.5 py-2 rounded-md font-medium text-lg text-gray-400">
                   <Home className="mr-2.5 h-6 w-6" />
                   Accueil
                 </Link>
