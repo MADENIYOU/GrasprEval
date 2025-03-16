@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:@localhost:3306/projet"
+}
+
+model chatbot_logs {
+  id               BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id_utilisateur   Int?
+  question         String   @db.Text
+  reponse          String   @db.Text
+  date_interaction DateTime @default(now()) @db.Timestamp(0)
+}
+
+model copies {
+  id                BigInt                    @id @default(autoincrement()) @db.UnsignedBigInt
+  id_etudiant       Int?
+  id_examen         Int?
+  fichier_pdf       String                    @db.Text
+  date_soumission   DateTime                  @default(now()) @db.Timestamp(0)
+  statut_correction copies_statut_correction? @default(en_attente)
+}
+
+model corrections {
+  id              BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  id_copie        Int?
+  note            Float?                 @db.Float
+  commentaire     String?                @db.Text
+  correcteur      corrections_correcteur
+  date_correction DateTime               @default(now()) @db.Timestamp(0)
+}
+
+model distribution_notes {
+  id               BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  id_examen        Int?
+  note             String? @db.LongText
+  nombre_etudiants Int?    @default(0)
+}
+
+model examens {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  id_enseignant Int?
+  titre         String    @db.VarChar(255)
+  description   String?   @db.Text
+  fichier_pdf   String?   @db.Text
+  date_creation DateTime  @default(now()) @db.Timestamp(0)
+  date_limite   DateTime? @db.Date
+  type_examen   String?   @db.VarChar(10)
+  classe        String?   @db.VarChar(15)
+}
+
+model plagiat {
+  id              BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id_copie        Int?
+  taux_similarite Float?   @db.Float
+  rapport         String?  @db.Text
+  alerte          Boolean? @default(false)
+}
+
+model statistiques {
+  id            BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  id_examen     Int?
+  moyenne       Float? @db.Float
+  distribution  Int?
+  taux_reussite Float? @db.Float
+}
+
+model utilisateurs {
+  id               BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  nom              String            @db.VarChar(100)
+  prenom           String            @db.VarChar(100)
+  email            String            @unique(map: "email") @db.VarChar(100)
+  mot_de_passe     String            @db.Text
+  role             utilisateurs_role
+  date_inscription DateTime          @default(now()) @db.Timestamp(0)
+  classe           String?           @db.VarChar(10)
+}
+
+enum corrections_correcteur {
+  IA
+  enseignant
+}
+
+enum copies_statut_correction {
+  en_attente @map("en attente")
+  corrige
+}
+
+enum utilisateurs_role {
+  enseignant
+  etudiant
+}

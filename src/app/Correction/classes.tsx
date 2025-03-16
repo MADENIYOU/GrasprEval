@@ -1,9 +1,7 @@
-// app/Correction/page.tsx
 import ClassList from "@/components/ClassList";
 import { getClasses } from "../../../lib/getClasses";
 
-export default async function CorrectionPage() {
-  // Récupérer les classes depuis la base de données
+export default async function ClassesPage() {
   const classesFromDb = await getClasses();
 
   // Formater les données pour correspondre à l'interface Class
@@ -12,7 +10,12 @@ export default async function CorrectionPage() {
     name: classItem.name,
     description: `Description de la classe ${classItem.name}.`, // Description générique
     imageUrl: "https://loremflickr.com/g/320/240/team", // Image générique
-    redirectUrl: `/Correction/classe/${classItem.id}`, // URL de redirection dynamique
+    redirectUrl: `/classe/${classItem.id}`, // URL de redirection dynamique
   }));
-  
+
+  return (
+    <div>
+      <ClassList classes={classes} />
+    </div>
+  );
 }

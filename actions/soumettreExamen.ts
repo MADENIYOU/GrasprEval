@@ -16,10 +16,10 @@ export async function soumettreExamen(formData: FormData) {
   try {
     // Connexion à la base de données
     const db = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'projet',
+      host: 'mysql-n0reyni.alwaysdata.net',
+      user: 'n0reyni_sall',
+      password: 'passer123',
+      database: 'n0reyni_bd',
     });
 
     const classesArray = JSON.parse(classes);
@@ -28,8 +28,8 @@ export async function soumettreExamen(formData: FormData) {
     let fichierPath = null;
     if (fichier) {
       const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-      const fileName = `${Date.now()}-${fichier.name}`;
-      fichierPath = path.join('/uploads', fileName);
+      const fileName = `${Date.now()}-${fichier.name}`; // Nom unique pour éviter les conflits
+      fichierPath = path.join('/uploads', fileName); // Chemin relatif pour la base de données
 
       // Écrire le fichier dans le dossier `public/uploads`
       const fileBuffer = await fichier.arrayBuffer();
