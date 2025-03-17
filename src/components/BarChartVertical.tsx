@@ -3,17 +3,29 @@ import React, { useEffect, useState, CSSProperties } from "react";
 import { scaleBand, scaleLinear, max } from "d3";
 
 export function BarChartVertical() {
-  const [data, setData] = useState<{ key: string; value: number }[]>([]);
+  const [datasets, setDatasets] = useState<{ key: string; value: number }[][]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // Récupérer les données depuis l'API
     fetch("/api/distribution_notes")
       .then((res) => res.json())
-      .then((fetchedData) => setData(fetchedData))
+      .then((fetchedData) => setDatasets(fetchedData))
       .catch((error) => console.error("Erreur lors de la récupération des données :", error));
   }, []);
 
-  if (data.length === 0) return <p>Chargement des données...</p>;
+  useEffect(() => {
+    if (datasets.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % datasets.length);
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [datasets]);
+
+  if (datasets.length === 0) return <p>Chargement des données...</p>;
+
+  const data = datasets[currentIndex];
 
   // Scales
   const xScale = scaleBand()
@@ -95,7 +107,7 @@ export function BarChartVertical() {
                 borderRadius: "6px 6px 0 0",
                 marginLeft: `${xScale(d.key)}%`,
               }}
-              className="absolute bottom-0 bg-gradient-to-b from-blue-200 to-blue-400"
+              className="absolute bottom-0 bg-gradient-to-b from-blue-200 to-blue-400 transition-all duration-1000 ease-in-out"
             />
           );
         })}
