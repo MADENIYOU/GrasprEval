@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import { soumettreExamen } from "../../actions/soumettreExamen"; // Importez l'action côté serveur
+import React, { useState } from "react"; // Importez l'action côté serveur
 import { toast } from "react-toastify";
 
 const SoumettreExamen = () => {
@@ -14,26 +13,36 @@ const SoumettreExamen = () => {
   const [fichier, setFichier] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('nomExamen', nomExamen);
-    formData.append('description', description);
-    formData.append('typeExamen', typeExamen);
-    formData.append('dateLimite', dateLimite);
-    formData.append('classes', JSON.stringify(selectedClasses));
-    if (fichier) {
-      formData.append('fichier', fichier);
+  const formData = new FormData();
+  formData.append("nomExamen", nomExamen);
+  formData.append("description", description);
+  formData.append("typeExamen", typeExamen);
+  formData.append("dateLimite", dateLimite);
+  formData.append("classes", JSON.stringify(selectedClasses));
+  if (fichier) {
+    formData.append("fichier", fichier);
+  }
+
+  try {
+    const response = await fetch("/api/soumettreExamen", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la soumission");
     }
 
-    try {
-      const result = await soumettreExamen(formData); // Appeler l'action côté serveur
-      toast.success(result.message);
-    } catch (error) {
-      console.error('Erreur :', error);
-      alert('Erreur lors de la soumission de l\'examen');
-    }
-  };
+    const result = await response.json();
+    toast.success(result.message);
+  } catch (error) {
+    console.error("Erreur :", error);
+    toast.error("Erreur lors de la soumission de l'examen");
+  }
+};
+
 
   const ajouterClasse = () => {
     if (nouvelleClasse.trim() !== "" && !classes.includes(nouvelleClasse)) {
