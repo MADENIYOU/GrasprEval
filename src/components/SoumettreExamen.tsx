@@ -37,6 +37,7 @@ const SoumettreExamen = () => {
 
     const result = await response.json();
     toast.success(result.message);
+    toast.success("Emails envoyés aux étudiants concernés");
   } catch (error) {
     console.error("Erreur :", error);
     toast.error("Erreur lors de la soumission de l'examen");

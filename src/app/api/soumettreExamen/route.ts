@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     }
 
     await db.end();
-    return NextResponse.json({ message: "Examen soumis et emails envoyés avec succès !" });
+    return NextResponse.json({ message: "Examen soumis avec succès !" });
   } catch (error) {
     console.error("Erreur :", error);
     return NextResponse.json({ error: "Erreur lors de la soumission de l'examen" }, { status: 500 });
