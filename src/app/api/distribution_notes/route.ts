@@ -4,10 +4,10 @@ import mysql from "mysql2/promise";
 export async function GET() {
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
+      host: "mysql_db",
       user: "root",
-      password: "",
-      database: "projet",
+      password: "password",
+      database: "mydatabase",
     });
 
     const [rows] = await connection.execute("SELECT note FROM distribution_notes");

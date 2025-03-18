@@ -10,9 +10,9 @@ interface Class {
 export const getClasses = async (): Promise<Class[]> => {
   // Configuration de la connexion à la base de données
   const connection = await mysql.createConnection({
-    host: "localhost", 
+    host: "mysql_db", 
     user: "root",
-    password: "",
+    password: "password",
     database: "projet", 
   });
 

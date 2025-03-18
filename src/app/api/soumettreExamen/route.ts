@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
     const classes = JSON.parse(formData.get("classes") as string);
 
     const db = await mysql.createConnection({
-      host: "localhost",
+      host: "mysql_db",
       user: "root",
-      password: "",
+      password: "password",
       database: "projet",
     });
 
@@ -39,18 +39,24 @@ export async function POST(req: NextRequest) {
       service: "gmail",
       auth: {
         user: "menisall54@gmail.com",
-        pass: "jesb mnmw ecyr wvse",
+        pass: "jesb mnmw ecyr wvse", // Utilise un mot de passe d'application
       },
+      secure: true, // Utilise SSL pour la connexion
+      port: 465, // Port SSL
     });
 
     // Envoyer les emails
     for (const email of emails) {
-      await transporter.sendMail({
-        from: '"Université" <menisall54@gmail.com>',
-        to: email,
-        subject: `Nouvel Examen : ${nomExamen}`,
-        text: `Un nouvel examen (${nomExamen}) est disponible.\nDescription : ${description}\nDate limite : ${dateLimite}.`,
-      });
+      try {
+        await transporter.sendMail({
+          from: '"Université" <menisall54@gmail.com>',
+          to: email,
+          subject: `Nouvel Examen : ${nomExamen}`,
+          text: `Un nouvel examen (${nomExamen}) est disponible.\nDescription : ${description}\nDate limite : ${dateLimite}.`,
+        });
+      } catch (error) {
+        console.error("Erreur lors de l'envoi de l'email à", email, ":", error);
+      }
     }
 
     await db.end();
