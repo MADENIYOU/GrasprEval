@@ -70,7 +70,7 @@ const Sidebar = () => {
             variant="ghost"
             size="icon"
             onClick={() => setToggle(false)}
-            className="block lg:hidden absolute left-[360px] top-3 shadow-none text-white text-3xl lg:hidden z-20 hover:bg-transparent hover:text-gray-300"
+            className="block lg:hidden absolute left-[360px] top-3 shadow-none text-white text-3xl z-20 hover:bg-transparent hover:text-gray-300"
           >
             x
           </Button>
