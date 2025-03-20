@@ -1,36 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Home,
   LayoutDashboard,
   FilePlus,
-  Bell,
-  Menu,
-  Search,
-  ChevronDown,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ClassList from "@/components/ClassList";
+import { Class } from "@/lib/types"; // Import des types
 
-// Type pour les classes
-interface Class {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  redirectUrl: string;
-}
-
-interface SidebarProps {
-  classes: Class[];
-}
-
-const Sidebar = ({ classes }: SidebarProps) => {
+const Sidebar = () => {
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await fetch("/api/getClasses");
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des classes");
+        }
+        const data = await response.json();
+        setClasses(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClasses();
+  }, []);
 
   return (
     <div className="flex flex-col w-full bg-gray-900">
@@ -51,7 +57,7 @@ const Sidebar = ({ classes }: SidebarProps) => {
               <Link href="/Correction" className="text-blue-700">Correction</Link>
             </li>
             <li className="text-gray-200">
-              <Link href="/SoumettreExamen" >Nouvel Examen</Link>
+              <Link href="/SoumettreExamen">Nouvel Examen</Link>
             </li>
           </ul>
         </nav>
@@ -92,16 +98,22 @@ const Sidebar = ({ classes }: SidebarProps) => {
             <div className="py-3">
               <h4 className="pl-3 text-lg font-semibold text-gray-300">Classes</h4>
               <div className="my-2 py-2 px-3">
-                <nav className="grid gap-1.5">
-                  {classes.map((classItem) => (
-                    <Link key={classItem.id} href="#" className="flex items-center hover:bg-[#1F2937] hover:text-white py-1.5 rounded-md font-medium text-lg text-gray-400">
-                      <Avatar className="mr-2.5 h-6 w-6 rounded border border-gray-300">
-                        <AvatarFallback className="bg-gray-700 rounded">{classItem.name.slice(0, 1)}</AvatarFallback>
-                      </Avatar>
-                      {classItem.name}
-                    </Link>
-                  ))}
-                </nav>
+                {loading ? (
+                  <p className="text-gray-400">Chargement...</p>
+                ) : error ? (
+                  <p className="text-red-500">{error}</p>
+                ) : (
+                  <nav className="grid gap-1.5">
+                    {classes.map((classItem) => (
+                      <Link key={classItem.id} href="#" className="flex items-center hover:bg-[#1F2937] hover:text-white py-1.5 rounded-md font-medium text-lg text-gray-400">
+                        <Avatar className="mr-2.5 h-6 w-6 rounded border border-gray-300">
+                          <AvatarFallback className="bg-gray-700 rounded">{classItem.name.slice(0, 1)}</AvatarFallback>
+                        </Avatar>
+                        {classItem.name}
+                      </Link>
+                    ))}
+                  </nav>
+                )}
               </div>
             </div>
           </div>

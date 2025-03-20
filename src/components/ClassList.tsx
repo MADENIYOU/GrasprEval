@@ -5,9 +5,9 @@ import { getClasses } from "../../lib/getClasses"; // Importez la fonction getCl
 interface Class {
   id: string;
   name: string;
-  description: string;
-  imageUrl: string;
-  redirectUrl: string; // URL de redirection
+  description?: string;
+  imageUrl?: string;
+  redirectUrl?: string; // URL de redirection
 }
 
 interface ClassListProps {
