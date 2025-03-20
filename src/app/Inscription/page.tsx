@@ -11,10 +11,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export default function FormulaireInscription() {
   const router = useRouter();
+
   const searchParams = useSearchParams();
+  const roleFromUrl = searchParams ? searchParams.get("role") || "professeur" : "professeur";
+
   
-  // Récupération du rôle depuis les paramètres d'URL
-  const roleFromUrl = searchParams.get("role") ? searchParams.get("role") : "professeur";
   
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
