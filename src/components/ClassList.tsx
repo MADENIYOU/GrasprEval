@@ -23,15 +23,16 @@ const ClassList: React.FC<ClassListProps> = ({ classes }) => {
             key={classItem.id}
             id={classItem.id}
             name={classItem.name}
-            description={classItem.description}
-            imageUrl="/images/imageCard.jpg"
-            redirectUrl={classItem.redirectUrl}
+            description={classItem.description ?? "Pas de description"}
+            imageUrl={classItem.imageUrl ?? "/images/imageCard.jpg"}
+            redirectUrl={classItem.redirectUrl ?? "#"}
           />
         ))}
       </div>
     </div>
   );
 };
+
 
 // Récupérer les classes côté serveur
 export const getServerSideProps = async () => {
