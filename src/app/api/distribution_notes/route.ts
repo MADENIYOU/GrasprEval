@@ -1,19 +1,26 @@
 import { NextResponse } from "next/server";
 import mysql from "mysql2/promise";
+import { RowDataPacket, FieldPacket } from "mysql2";
 
 export async function GET() {
   try {
     const connection = await mysql.createConnection({
       host: "mysql-n0reyni.alwaysdata.net",
-  user: "n0reyni_sall",
-  password: "passer123",
-  database: "n0reyni_bd",
+      user: "n0reyni_sall",
+      password: "passer123",
+      database: "n0reyni_bd",
     });
 
-    const [rows] = await connection.execute("SELECT note FROM distribution_notes");
+    const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await connection.execute(
+      "SELECT note FROM distribution_notes"
+    );
     await connection.end();
 
-    const data = rows.map((row: any) => {
+    if (!Array.isArray(rows)) {
+      throw new Error("Le résultat de la requête n'est pas un tableau.");
+    }
+
+    const data = rows.map((row) => {
       const notes = JSON.parse(row.note);
       return Object.entries(notes).map(([key, value]) => ({
         key,
