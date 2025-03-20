@@ -60,7 +60,15 @@ export default function Professeur() {
     };
 
     // Animation pour les nuages
-    const [clouds, setClouds] = useState([]);
+    const [clouds, setClouds] = useState<{ 
+        id: number; 
+        left: number; 
+        top: number; 
+        speed: number; 
+        size: number; 
+        delay: number; 
+    }[]>([]);
+  
     
     useEffect(() => {
         // Créer des nuages aléatoires
