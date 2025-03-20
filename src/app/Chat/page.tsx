@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
-import Link from "next/link"; 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
