@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { SearchIcon } from "lucide-react"
@@ -15,8 +13,9 @@ import {
 
 function Command({
   className,
+  children, // Ajout explicite de children
   ...props
-}: React.ComponentProps<typeof CommandPrimitive>) {
+}: React.ComponentProps<typeof CommandPrimitive> & { children: React.ReactNode }) { // Assurez-vous que children est typé en React.ReactNode
   return (
     <CommandPrimitive
       data-slot="command"
@@ -25,7 +24,9 @@ function Command({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </CommandPrimitive>
   )
 }
 
@@ -37,6 +38,7 @@ function CommandDialog({
 }: React.ComponentProps<typeof Dialog> & {
   title?: string
   description?: string
+  children: React.ReactNode // Ajout explicite de children
 }) {
   return (
     <Dialog {...props}>
