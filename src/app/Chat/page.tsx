@@ -13,8 +13,8 @@ export default function Chat() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
-  const chatEndRef = useRef(null);
+  const [chatHistory, setChatHistory] = useState<{ user: string; bot: any }[]>([]);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const sendMessage = async () => {
     if (!message.trim()) {
