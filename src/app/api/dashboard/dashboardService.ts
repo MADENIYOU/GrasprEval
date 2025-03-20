@@ -25,8 +25,7 @@ export async function getDashboardData() {
       studentsCount: (rows as { studentsCount: number }[])[0].studentsCount,
     };
 
-    console.log("Données récupérées :", data); // Log pour déboguer
-
+    console.log("Données récupérées :", data);
     // Convertir l'objet en JSON
     const jsonData = JSON.stringify(data);
     return jsonData; // Retourner les données en JSON
