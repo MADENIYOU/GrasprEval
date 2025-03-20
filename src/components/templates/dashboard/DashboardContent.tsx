@@ -5,6 +5,12 @@ import { Overview } from "@/components/templates/dashboard/Overview";
 import { RecentSales } from "@/components/templates/dashboard/RecentSales";
 import { DashboardMetrics } from "@/components/templates/dashboard/DashboardMetrics";
 import { Card } from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
+import { CardFooter } from "@/components/ui/card";
+import { CardTitle } from "@/components/ui/card";
+import { CardAction } from "@/components/ui/card";
+import { CardDescription } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 
 export const DashboardContent = () => {
   return (
