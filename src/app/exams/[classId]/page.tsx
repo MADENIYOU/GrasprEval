@@ -3,6 +3,7 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link"; // Importation de Link
 
 interface Exam {
   id: string;
@@ -80,58 +81,63 @@ const ExamsPage: React.FC = () => {
       <h1 className="text-2xl font-bold mb-4">Examens de la classe {classId}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl p-4">
         {exams.map((exam) => (
-          <div
+          <Link
             key={exam.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            href={`/exams/${classId}/${exam.id}`} // Redirection vers la page dynamique
+            passHref
           >
-            <div className="p-6">
-              {/* Titre de l'examen */}
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {exam.titre}
-              </h2>
+            <div
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            >
+              <div className="p-6">
+                {/* Titre de l'examen */}
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  {exam.titre}
+                </h2>
 
-              {/* Description de l'examen */}
-              {exam.description && (
-                <p className="text-gray-600 text-sm mb-4">{exam.description}</p>
-              )}
+                {/* Description de l'examen */}
+                {exam.description && (
+                  <p className="text-gray-600 text-sm mb-4">{exam.description}</p>
+                )}
 
-              {/* Informations supplémentaires */}
-              <div className="space-y-2 text-gray-500 text-xs">
-                <p>
-                  <span className="font-medium">Date de création :</span>{" "}
-                  {exam.date_creation}
-                </p>
-                {exam.date_limite && (
+                {/* Informations supplémentaires */}
+                <div className="space-y-2 text-gray-500 text-xs">
                   <p>
-                    <span className="font-medium">Date limite :</span>{" "}
-                    {exam.date_limite}
+                    <span className="font-medium">Date de création :</span>{" "}
+                    {exam.date_creation}
                   </p>
-                )}
-                {exam.type_examen && (
-                  <p>
-                    <span className="font-medium">Type :</span> {exam.type_examen}
-                  </p>
-                )}
-                {exam.matiere && (
-                  <p>
-                    <span className="font-medium">Matière :</span> {exam.matiere}
-                  </p>
+                  {exam.date_limite && (
+                    <p>
+                      <span className="font-medium">Date limite :</span>{" "}
+                      {exam.date_limite}
+                    </p>
+                  )}
+                  {exam.type_examen && (
+                    <p>
+                      <span className="font-medium">Type :</span> {exam.type_examen}
+                    </p>
+                  )}
+                  {exam.matiere && (
+                    <p>
+                      <span className="font-medium">Matière :</span> {exam.matiere}
+                    </p>
+                  )}
+                </div>
+
+                {/* Lien pour télécharger le PDF */}
+                {exam.fichier_pdf && (
+                  <a
+                    href={exam.fichier_pdf}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-block text-blue-500 text-sm hover:underline"
+                  >
+                    Télécharger le PDF
+                  </a>
                 )}
               </div>
-
-              {/* Lien pour télécharger le PDF */}
-              {exam.fichier_pdf && (
-                <a
-                  href={exam.fichier_pdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-block text-blue-500 text-sm hover:underline"
-                >
-                  Télécharger le PDF
-                </a>
-              )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
