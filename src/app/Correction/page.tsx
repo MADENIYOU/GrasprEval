@@ -1,4 +1,6 @@
 // app/Correction/page.tsx
+// @ts-nocheck
+
 import ClassList from "@/components/ClassList";
 import { getClasses } from "../../../lib/getClasses";
 

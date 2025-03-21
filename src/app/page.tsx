@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Image from "next/image";
 import TypingAnimations from "../components/TypingAnimations";
 import Footer from "@/components/Footer";

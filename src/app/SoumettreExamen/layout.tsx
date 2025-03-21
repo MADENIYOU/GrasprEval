@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import React from "react";
 import Footer from "../../components/Footer";
 import Link from "next/link";

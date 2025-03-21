@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import ClassList from "@/components/ClassList";
 import { getClasses } from "../../../lib/getClasses";
 

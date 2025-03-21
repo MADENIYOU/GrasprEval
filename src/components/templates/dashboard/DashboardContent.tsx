@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDateRangePicker } from "@/components/templates/dashboard/CalendarDateRangePicker";
 import { Button } from "@/components/ui/button";

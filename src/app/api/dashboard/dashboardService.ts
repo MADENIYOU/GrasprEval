@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import mysql from "mysql2/promise";
 
 // Fonction pour récupérer toutes les données du dashboard

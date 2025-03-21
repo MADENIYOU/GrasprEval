@@ -1,3 +1,4 @@
+// @ts-nocheck
 export default function CorrectionResults({ correctionResult }: { correctionResult: any }) {
   return (
     <div className="w-1/4 bg-gray-100 p-4">

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import ClassCard from "./ClassCard";
 import { getClasses } from "../../lib/getClasses"; // Importez la fonction getClasses

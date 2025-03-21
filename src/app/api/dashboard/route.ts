@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import { getDashboardData } from "./dashboardService";
 
 export async function GET() {

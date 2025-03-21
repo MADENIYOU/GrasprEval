@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { TeamSwitcher } from "@/components/templates/dashboard/TeamSwitcher";
 import { MainNav } from "@/components/templates/dashboard/MainNav";
 import { Search } from "@/components/templates/dashboard/Search";

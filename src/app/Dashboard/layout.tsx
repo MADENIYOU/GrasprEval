@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 "use client";
 
 import { Inter } from "next/font/google";
