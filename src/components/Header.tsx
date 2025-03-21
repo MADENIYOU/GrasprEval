@@ -10,14 +10,14 @@ const Header: React.FC = () => {
           <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text">
             Graspr
           </span>
-          <span className="text-white font-extrabold">Etu</span>
+          <span className="text-white font-extrabold">Eval</span>
         </h1>
         <ul className="py-4 flex-1 items-center flex space-x-3 sm:space-x-6 sm:justify-end">
           <li className="text-gray-200">
             <a href="/Dashboard" className="text-blue-700">Dashboard</a>
           </li>
           <li className="text-gray-200">
-            <a href="/Matieres">Matières</a>
+            <a href="/Correction">Correction</a>
           </li>
           <li className="text-gray-200">
             <a href="https://chat-delta-rose.vercel.app/chat">ChatBot</a>
