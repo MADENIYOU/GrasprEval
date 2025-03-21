@@ -131,7 +131,7 @@ const ExamCopiesPage: React.FC = () => {
       <Header />
       <div className="flex md:items-center flex-col md:flex-row gap-5 md:gap-2 justify-between">
         <div className="flex flex-col gap-2 items-start text-white">
-          <h3 className="text-lg font-semibold">Copies de l'examen</h3>
+          <h1 className="text-lg font-semibold">Copies de l'examen</h1>
           <p className="font-medium">
             Liste des copies soumises pour cet examen, avec les détails des
             étudiants et le statut de correction.
@@ -157,13 +157,13 @@ const ExamCopiesPage: React.FC = () => {
                   <TableRow key={copy.id} className="text-white font-medium">
                     <TableCell className="py-5 flex items-center gap-3">
                       <Avatar>
-                        <AvatarFallback>
-                          {copy.nom?.charAt(0) || "?"}
+                        <AvatarFallback className="bg-black">
                           {copy.prenom?.charAt(0) || "?"}
+                          {copy.nom?.charAt(0) || "?"}
                         </AvatarFallback>
                       </Avatar>
                       <p className="font-medium">
-                        {copy.nom || "Nom inconnu"} {copy.prenom || "Prénom inconnu"}
+                         {copy.prenom || "Prénom inconnu"} {copy.nom || "Nom inconnu"}
                       </p>
                     </TableCell>
 
