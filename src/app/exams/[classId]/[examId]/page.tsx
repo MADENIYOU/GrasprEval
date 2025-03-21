@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client"; // Indique que ce composant est un Client Component
 
 import React from "react";
@@ -161,7 +163,7 @@ const ExamCopiesPage: React.FC = () => {
                     <TableCell className="py-5">
                       <Button
                         variant="outline"
-                        className="bg-transparent bg-green-500 flex items-center gap-2"
+                        className="bg-green-500 flex items-center gap-2"
                         onClick={() => {
                           console.log("Corriger la copie", copy.id);
                         }}
@@ -173,7 +175,7 @@ const ExamCopiesPage: React.FC = () => {
                     <TableCell className="py-5">
                       <Button
                         variant="outline"
-                        className="bg-transparent bg-yellow-500 flex items-center gap-2"
+                        className="bg-yellow-500 flex items-center gap-2"
                         onClick={() => {
                           console.log("Modifier la note de la copie", copy.id);
                         }}

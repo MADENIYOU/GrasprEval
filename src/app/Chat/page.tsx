@@ -94,7 +94,7 @@ export default function Chat() {
 
       {/* Input & Send Button (Fixed at Bottom) */}
       <div className="flex items-center space-x-4 p-4 border-t-2 border-white bg-gray-700">
-        <Input  type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Posez une question" className="flex-grow py-7 text-5xl px-5 text-lg border border-gray-300 bg-gray-700 text-white" />
+        <Input  type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Posez une question" className="flex-grow py-7 text-5xl px-5 border border-gray-300 bg-gray-700 text-white" />
         <Button onClick={sendMessage} disabled={loading} className="bg-gray-900 text-white text-lg py-3 px-8 shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none">
           {loading ? <Loader2 className="animate-spin" /> : "Send"}
         </Button>

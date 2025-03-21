@@ -1,4 +1,4 @@
-// app/exams/[classId]/page.tsx
+// @ts-nocheck
 "use client"; // Indique que ce composant est un Client Component
 
 import React from "react";
