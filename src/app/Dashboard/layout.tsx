@@ -14,6 +14,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <div className={inter.className}>
       <div className="flex min-h-screen flex-col bg-gray-900">

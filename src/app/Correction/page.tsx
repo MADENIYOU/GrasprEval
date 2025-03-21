@@ -16,5 +16,10 @@ export default async function CorrectionPage() {
     imageUrl: "https://loremflickr.com/g/320/240/team", // Image générique
     redirectUrl: `/Correction/classe/${classItem.id}`, // URL de redirection dynamique
   }));
-  
+
+  return (
+    <div>
+      <ClassList classes={classes} />
+    </div>
+  );
 }

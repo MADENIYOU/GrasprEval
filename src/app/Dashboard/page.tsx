@@ -63,7 +63,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 bg-gray-900">
         {/* Carte 1 : Nombre de classes */}
         <Card>
           <CardHeader>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
 
       {/* Graphique */}
       <div className="mt-6">
-        <Card className="col-span-4">
+        <Card className="col-span-4 bg-gray-900">
           <CardHeader>
             <CardTitle>Overview</CardTitle>
           </CardHeader>
