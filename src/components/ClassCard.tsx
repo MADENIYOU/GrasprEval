@@ -1,4 +1,4 @@
-// @ts-nocheck
+// components/ClassCard.tsx
 import React from "react";
 import Link from "next/link";
 
@@ -7,7 +7,6 @@ interface ClassCardProps {
   name: string;
   imageUrl: string;
   description: string;
-  redirectUrl: string;
 }
 
 const ClassCard: React.FC<ClassCardProps> = ({
@@ -15,10 +14,12 @@ const ClassCard: React.FC<ClassCardProps> = ({
   name,
   imageUrl,
   description,
-  redirectUrl,
 }) => {
+  // Encoder le nom de la classe pour qu'il soit valide dans une URL
+  const encodedClassName = encodeURIComponent(name);
+
   return (
-    <Link href={redirectUrl || "#"} passHref className="w-full">
+    <Link href={`/exams/${encodedClassName}`} passHref className="w-full">
       <div className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow duration-300 border border-gray-200 max-w-xs">
         {/* Image de la carte */}
         <img
