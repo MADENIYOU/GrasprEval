@@ -44,7 +44,9 @@ const ExamCopiesPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedCopyId, setSelectedCopyId] = React.useState<string | null>(null);
   const [newNote, setNewNote] = React.useState<number | null>(null);
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
+  const [showSuccessPopup, setShowSuccessPopup] = React.useState(false); // Contrôle l'affichage du popup de succès
+  const [aiComment, setAiComment] = React.useState<string | null>(null); // Stocke le commentaire de l'IA
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false); // Contrôle l'affichage de la sidebar
 
   React.useEffect(() => {
     if (examId) {
@@ -87,38 +89,48 @@ const ExamCopiesPage: React.FC = () => {
             : copy
         )
       );
-      setSuccessMessage("La note a été modifiée avec succès.");
+      setShowSuccessPopup(true);
       closeModal();
     }
   };
 
   const correctCopyWithAI = async (copyId: string, pdfUrl: string) => {
     try {
-        console.log(copyId, pdfUrl);
       const response = await fetch("/api/corrections", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ copyId, pdfUrl }),
       });
-  
+
       if (!response.ok) throw new Error("Erreur lors de la correction");
-  
+
       const data = await response.json();
       console.log("Correction reçue :", data);
-  
-      // Mettre à jour la note et le statut dans l'UI
+
+      // Mettre à jour la note, le statut et le commentaire dans l'UI
       setCopies((prevCopies) =>
         prevCopies.map((copy) =>
-          copy.id === copyId ? { ...copy, note: data.note, statut_correction: "corrige" } : copy
+          copy.id === copyId
+            ? { ...copy, note: data.note, statut_correction: "corrige" }
+            : copy
         )
       );
+
+      // Stocker le commentaire de l'IA
+      setAiComment(data.commentaire);
+
+      // Afficher le popup de succès
+      setShowSuccessPopup(true);
     } catch (error) {
       console.error("Erreur lors de la correction :", error);
     }
   };
-  
 
-  <Header />
+  // Fonction pour fermer le popup de succès et ouvrir la sidebar
+  const handleCloseSuccessPopup = () => {
+    setShowSuccessPopup(false); // Fermer le popup de succès
+    setIsSidebarOpen(true); // Ouvrir la sidebar
+  };
 
   // Si examId est undefined (chargement initial)
   if (!examId) {
@@ -292,15 +304,16 @@ const ExamCopiesPage: React.FC = () => {
         </div>
       )}
       
-      {successMessage && (
+      {/* Popup de succès */}
+      {showSuccessPopup && (
         <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-80">
             <h2 className="text-xl font-semibold mb-4 text-green-500">Succès</h2>
-            <p className="text-green-900">{successMessage}</p>
+            <p className="text-green-900">La correction a été réalisée avec succès.</p>
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"
-                onClick={() => setSuccessMessage(null)}
+                onClick={handleCloseSuccessPopup}
                 className="bg-red-500 text-white"
               >
                 Fermer
@@ -309,6 +322,26 @@ const ExamCopiesPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Sidebar pour afficher le commentaire de l'IA */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 bg-none bg-opacity-5 flex justify-end items-center z-50">
+          <div className="bg-gray-900 p-6 rounded-lg w-96 max-h-screen overflow-y-auto shadow-lg">
+            <h2 className="text-xl font-semibold mb-4 text-white">Commentaire de l'IA</h2>
+            <p className="text-white">{aiComment}</p>
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsSidebarOpen(false)}
+                className="bg-red-500 text-white"
+              >
+                Fermer
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

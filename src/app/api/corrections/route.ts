@@ -85,9 +85,7 @@ Commentaire: [commentaire détaillé]
     const noteMatch = responseText.match(/Note:\s*(\d+)/);
     // @ts-ignore
     const commentaireMatch = responseText.match(/Commentaire:\s*(.*)/s);
-
-    console.log("Note extraite:", noteMatch ? noteMatch[1] : "Non trouvée");
-    console.log("Commentaire extrait:", commentaireMatch ? commentaireMatch[1].trim() : "Aucun commentaire");
+    
 
     if (!noteMatch) throw new Error("Impossible d'extraire la note");
     const note = parseFloat(noteMatch[1]);
