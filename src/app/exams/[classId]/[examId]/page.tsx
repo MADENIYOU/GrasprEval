@@ -47,6 +47,7 @@ const ExamCopiesPage: React.FC = () => {
   const [showSuccessPopup, setShowSuccessPopup] = React.useState(false); // Contrôle l'affichage du popup de succès
   const [aiComment, setAiComment] = React.useState<string | null>(null); // Stocke le commentaire de l'IA
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false); // Contrôle l'affichage de la sidebar
+  const [correctionEnCours, setCorrectionEnCours] = React.useState<{ [key: string]: boolean }>({});
 
   React.useEffect(() => {
     if (examId) {
@@ -96,17 +97,20 @@ const ExamCopiesPage: React.FC = () => {
 
   const correctCopyWithAI = async (copyId: string, pdfUrl: string) => {
     try {
+      // Indiquer que la correction est en cours pour cette copie
+      setCorrectionEnCours((prev) => ({ ...prev, [copyId]: true }));
+  
       const response = await fetch("/api/corrections", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ copyId, pdfUrl }),
       });
-
+  
       if (!response.ok) throw new Error("Erreur lors de la correction");
-
+  
       const data = await response.json();
       console.log("Correction reçue :", data);
-
+  
       // Mettre à jour la note, le statut et le commentaire dans l'UI
       setCopies((prevCopies) =>
         prevCopies.map((copy) =>
@@ -115,14 +119,17 @@ const ExamCopiesPage: React.FC = () => {
             : copy
         )
       );
-
+  
       // Stocker le commentaire de l'IA
       setAiComment(data.commentaire);
-
+  
       // Afficher le popup de succès
       setShowSuccessPopup(true);
     } catch (error) {
       console.error("Erreur lors de la correction :", error);
+    } finally {
+      // Indiquer que la correction est terminée
+      setCorrectionEnCours((prev) => ({ ...prev, [copyId]: false }));
     }
   };
 
@@ -244,14 +251,22 @@ const ExamCopiesPage: React.FC = () => {
                     </TableCell>
 
                     <TableCell className="py-5">
-                    <Button
+                      <Button
                         variant="outline"
-                        className="bg-green-500 text-white flex items-center gap-2"
+                        className={`${
+                          correctionEnCours[copy.id] ? "bg-gray-500 text-white" : "bg-green-500 text-white"
+                        } flex items-center gap-2`}
                         onClick={() => correctCopyWithAI(copy.id, copy.fichier_pdf)}
-                        >
-                        <FaCheckCircle /> Corriger
-                    </Button>
-
+                        disabled={correctionEnCours[copy.id]} // Désactiver le bouton pendant la correction
+                      >
+                        {correctionEnCours[copy.id] ? (
+                          <span>Correction en cours...</span>
+                        ) : (
+                          <>
+                            <FaCheckCircle /> Corriger
+                          </>
+                        )}
+                      </Button>
                     </TableCell>
 
                     <TableCell className="py-5">
