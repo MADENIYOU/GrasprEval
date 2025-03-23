@@ -108,7 +108,7 @@ export function BarChartVertical() {
                 borderRadius: "6px 6px 0 0",
                 marginLeft: `${xScale(d.key)}%`,
               }}
-              className="absolute bottom-0 bg-gradient-to-b from-blue-200 to-blue-400 transition-all duration-1000 ease-in-out"
+              className="absolute bottom-0 bg-gradient-to-b from-yellow-500 to-blue-400 transition-all duration-1000 ease-in-out"
             />
           );
         })}

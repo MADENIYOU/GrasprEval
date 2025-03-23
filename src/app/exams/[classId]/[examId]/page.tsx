@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-"use client"; // Indique que ce composant est un Client Component
+"use client";
 
 import React from "react";
 import { useParams } from "next/navigation";
@@ -92,6 +92,32 @@ const ExamCopiesPage: React.FC = () => {
     }
   };
 
+  const correctCopyWithAI = async (copyId: string, pdfUrl: string) => {
+    try {
+        console.log(copyId, pdfUrl);
+      const response = await fetch("/api/corrections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ copyId, pdfUrl }),
+      });
+  
+      if (!response.ok) throw new Error("Erreur lors de la correction");
+  
+      const data = await response.json();
+      console.log("Correction reçue :", data);
+  
+      // Mettre à jour la note et le statut dans l'UI
+      setCopies((prevCopies) =>
+        prevCopies.map((copy) =>
+          copy.id === copyId ? { ...copy, note: data.note, statut_correction: "corrige" } : copy
+        )
+      );
+    } catch (error) {
+      console.error("Erreur lors de la correction :", error);
+    }
+  };
+  
+
   <Header />
 
   // Si examId est undefined (chargement initial)
@@ -143,10 +169,11 @@ const ExamCopiesPage: React.FC = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="py-5 text-white">Étudiant</TableHead>
+              <TableHead className="py-5 text-white ">Étudiant</TableHead>
               <TableHead className="py-5 text-white">Email</TableHead>
               <TableHead className="py-5 text-white">Statut</TableHead>
               <TableHead className="py-5 text-white">Fichier PDF</TableHead>
+              <TableHead className="py-5 text-white">Note</TableHead>
               <TableHead className="py-5 text-white">Corriger</TableHead>
               <TableHead className="py-5 text-white">Modifier la note</TableHead>
             </TableRow>
@@ -191,7 +218,7 @@ const ExamCopiesPage: React.FC = () => {
 
                     <TableCell className="py-5">
                       <a
-                        href={copy.fichier_pdf}
+                        href={`/uploads/${copy.fichier_pdf}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:underline flex items-center gap-2"
@@ -201,15 +228,18 @@ const ExamCopiesPage: React.FC = () => {
                     </TableCell>
 
                     <TableCell className="py-5">
-                      <Button
+                        <p className="text-white">{copy.note !== null ? copy.note : "N/A"} </p>
+                    </TableCell>
+
+                    <TableCell className="py-5">
+                    <Button
                         variant="outline"
                         className="bg-green-500 text-white flex items-center gap-2"
-                        onClick={() => {
-                          console.log("Corriger la copie", copy.id);
-                        }}
-                      >
+                        onClick={() => correctCopyWithAI(copy.id, copy.fichier_pdf)}
+                        >
                         <FaCheckCircle /> Corriger
-                      </Button>
+                    </Button>
+
                     </TableCell>
 
                     <TableCell className="py-5">
@@ -261,8 +291,7 @@ const ExamCopiesPage: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Modale de confirmation de modification */}
+      
       {successMessage && (
         <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-80">
