@@ -16,10 +16,10 @@ export async function GET(request: Request) {
   try {
     // Connexion à la base de données
     const connection = await mysql.createConnection({
-        host: 'mysql-n0reyni.alwaysdata.net', // Remplacez par votre hôte
-        user: 'n0reyni_sall', // Remplacez par votre utilisateur
-        password: 'passer123', // Remplacez par votre mot de passe
-        database: 'n0reyni_bd',// Remplacez par le nom de votre base de données
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,// Remplacez par le nom de votre base de données
     });
 
     // Exécuter la requête SQL

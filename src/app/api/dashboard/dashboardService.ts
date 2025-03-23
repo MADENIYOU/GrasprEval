@@ -6,10 +6,10 @@ import mysql from "mysql2/promise";
 // Fonction pour récupérer toutes les données du dashboard
 export async function getDashboardData() {
   const connection = await mysql.createConnection({
-    host: "mysql-n0reyni.alwaysdata.net",
-  user: "n0reyni_sall",
-  password: "passer123",
-  database: "n0reyni_bd", // Assurez-vous que la base de données existe
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE, // Assurez-vous que la base de données existe
   });
 
   try {
