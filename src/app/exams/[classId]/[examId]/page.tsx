@@ -35,7 +35,6 @@ interface Copy {
 
 const ExamCopiesPage: React.FC = () => {
   const params = useParams();
-  //@ts-ignore
   const examId = params.examId as string;
 
   const [copies, setCopies] = React.useState<Copy[]>([]);
@@ -44,15 +43,14 @@ const ExamCopiesPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedCopyId, setSelectedCopyId] = React.useState<string | null>(null);
   const [newNote, setNewNote] = React.useState<number | null>(null);
-  const [showSuccessPopup, setShowSuccessPopup] = React.useState(false); // Contrôle l'affichage du popup de succès
-  const [aiComment, setAiComment] = React.useState<string | null>(null); // Stocke le commentaire de l'IA
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false); // Contrôle l'affichage de la sidebar
+  const [showSuccessPopup, setShowSuccessPopup] = React.useState(false);
+  const [aiComment, setAiComment] = React.useState<string | null>(null); 
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [correctionEnCours, setCorrectionEnCours] = React.useState<{ [key: string]: boolean }>({});
 
   React.useEffect(() => {
     if (examId) {
       setLoading(true);
-      // Appeler l'API pour récupérer les copies de l'examen
       fetch(`/api/exams/${examId}/copies`)
         .then((response) => {
           if (!response.ok) {
@@ -209,7 +207,7 @@ const ExamCopiesPage: React.FC = () => {
                         </AvatarFallback>
                       </Avatar>
                       <p className="font-medium">
-                         {copy.prenom || "Prénom inconnu"} {copy.nom || "Nom inconnu"}
+                        {copy.prenom || "Prénom inconnu"} {copy.nom || "Nom inconnu"}
                       </p>
                     </TableCell>
 

@@ -13,10 +13,10 @@ interface Class {
 export const getClasses = async (): Promise<Class[]> => {
   // Configuration de la connexion à la base de données
   const connection = await mysql.createConnection({
-    host: "mysql-n0reyni.alwaysdata.net",
-  user: "n0reyni_sall",
-  password: "passer123",
-  database: "n0reyni_bd",
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
   });
 
   try {

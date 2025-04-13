@@ -41,11 +41,11 @@ export async function POST(req: NextRequest) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "menisall54@gmail.com",
-        pass: "jesb mnmw ecyr wvse", // Utilise un mot de passe d'application
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
-      secure: true, // Utilise SSL pour la connexion
-      port: 465, // Port SSL
+      secure: true,
+      port: 465,
     });
 
     // Envoyer les emails

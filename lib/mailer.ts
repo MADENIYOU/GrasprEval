@@ -4,20 +4,20 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Utilisez le service de votre choix (Gmail, Outlook, etc.)
+  service: 'gmail', 
   auth: {
-    user: process.env.EMAIL_USER, // Votre adresse e-mail
-    pass: process.env.EMAIL_PASSWORD, // Votre mot de passe ou mot de passe d'application
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
 export async function sendEmail(to: string, subject: string, text: string) {
   const mailOptions = {
-    from: process.env.EMAIL_USER, // Expéditeur
-    to, // Destinataire
-    subject, // Sujet de l'e-mail
-    text, // Corps de l'e-mail (version texte)
-    html: `<p>${text}</p>`, // Corps de l'e-mail (version HTML)
+    from: process.env.EMAIL_USER, 
+    to,
+    subject,
+    text,
+    html: `<p>${text}</p>`,
   };
 
   try {
