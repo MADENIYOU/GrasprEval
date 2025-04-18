@@ -1,45 +1,79 @@
 // @ts-nocheck
-
-
 import mysql from "mysql2/promise";
 
-// Fonction pour récupérer toutes les données du dashboard
-export async function getDashboardData() {
+export async function getDashboardData(profId: number) {
   const connection = await mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE, // Assurez-vous que la base de données existe
+    database: process.env.MYSQL_DATABASE,
   });
 
   try {
-    // Exécuter la requête SQL pour récupérer les données
-    const [rows] = await connection.execute(`
-      SELECT
-        (SELECT COUNT(DISTINCT classe) FROM utilisateurs WHERE classe IS NOT NULL) AS classesCount,
-        (SELECT COUNT(*) FROM examens) AS examsCount,
-        (SELECT COUNT(*) FROM utilisateurs WHERE role = 'etudiant') AS studentsCount
-    `);
+    // 1. Récupérer les examens publiés par le prof
+    const [examens] = await connection.execute(
+      "SELECT id, classe FROM examens WHERE id_enseignant = ?",
+      [profId]
+    );
 
-    // Extraire les résultats
-    const data = {
-      classesCount: (rows as { classesCount: number }[])[0].classesCount,
-      examsCount: (rows as { examsCount: number }[])[0].examsCount,
-      studentsCount: (rows as { studentsCount: number }[])[0].studentsCount,
+    const examensIds = examens.map(e => e.id);
+    const classes = examens.map(e => e.classe);
+    const classesUniques = [...new Set(classes)];
+
+    // 2. Compter les élèves dans les classes du prof
+    let studentsCount = 0;
+    if (classesUniques.length > 0) {
+      const placeholders = classesUniques.map(() => '?').join(',');
+      const [etudiants] = await connection.execute(
+        `SELECT COUNT(*) as total FROM utilisateurs WHERE role = 'etudiant' AND classe IN (${placeholders})`,
+        classesUniques
+      );
+      studentsCount = etudiants[0]?.total || 0;
+    }
+
+    // 3. Récupérer les distributions de notes pour ses examens
+    let notesDistributions = [];
+    if (examensIds.length > 0) {
+      const placeholders = examensIds.map(() => '?').join(',');
+      const [distributions] = await connection.execute(
+        `SELECT id_examen, note, nombre_etudiants FROM distribution_notes WHERE id_examen IN (${placeholders})`,
+        examensIds
+      );
+
+      notesDistributions = distributions.map(dist => ({
+        id_examen: dist.id_examen,
+        note: safeParseNote(dist.note), // Utilisation de la fonction de parsing sécurisé
+        nombre_etudiants: dist.nombre_etudiants,
+      }));
+    }
+
+    return {
+      classesCount: classesUniques.length,
+      examsCount: examensIds.length,
+      studentsCount,
+      notesDistributions,
     };
-
-    console.log("Données récupérées :", data);
-    // Convertir l'objet en JSON
-    const jsonData = JSON.stringify(data);
-    return jsonData; // Retourner les données en JSON
   } catch (error) {
-    console.error("Erreur lors de la récupération des données du dashboard :", error); // Log l'erreur complète
-
-    // Retourner des valeurs par défaut en JSON en cas d'erreur
-    const errorData = JSON.stringify({ classesCount: 0, examsCount: 0, studentsCount: 0 });
-    return errorData;
+    console.error("Erreur dashboard prof :", error);
+    return {
+      classesCount: 0,
+      examsCount: 0,
+      studentsCount: 0,
+      notesDistributions: [],
+    };
   } finally {
-    // Fermer la connexion
     await connection.end();
+  }
+}
+
+// Fonction de parsing sécurisé pour éviter les erreurs avec des données mal formatées
+function safeParseNote(note: any) {
+  try {
+    // Si note est une chaîne, essayer de la parser en objet
+    return typeof note === "string" ? JSON.parse(note) : note;
+  } catch (error) {
+    // En cas d'échec, retourner un tableau vide
+    console.error("Erreur lors du parsing de la note:", error);
+    return [];
   }
 }

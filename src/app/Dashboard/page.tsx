@@ -1,28 +1,26 @@
 // @ts-nocheck
-
-
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Overview } from "@/components/templates/dashboard/Overview";
 import { useEffect, useState } from "react";
-import { getDashboardData } from "../api/dashboard/dashboardService";
 import { BarChartVertical } from "@/components/BarChartVertical";
 
 export default function DashboardPage() {
   const [classesCount, setClassesCount] = useState<number | null>(null);
   const [examsCount, setExamsCount] = useState<number | null>(null);
   const [studentsCount, setStudentsCount] = useState<number | null>(null);
+  const [notesDistributions, setNotesDistributions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/dashboard") // Appeler l'API route
+    fetch("/api/dashboard")
       .then((response) => response.json())
       .then((data) => {
         setClassesCount(data.classesCount);
         setExamsCount(data.examsCount);
         setStudentsCount(data.studentsCount);
+        setNotesDistributions(data.notesDistributions);
       })
       .catch((err) => {
         console.error("Erreur lors de la récupération des données :", err);
@@ -38,9 +36,7 @@ export default function DashboardPage() {
             <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-transparent bg-clip-text">
               Graspr
             </span>
-            <span className="text-white font-extrabold">
-              Eval
-            </span>
+            <span className="text-white font-extrabold">Eval</span>
           </h1>
           <ul className="py-4 flex-1 items-center flex space-x-3 sm:space-x-6 sm:justify-end">
             <li className="text-gray-200">
@@ -55,16 +51,14 @@ export default function DashboardPage() {
           </ul>
         </nav>
       </header>
+
       <h1 className="text-3xl font-bold mb-6 text-white">Dashboard</h1>
 
       {error && (
-        <div className="text-red-500 mb-4">
-          {error}
-        </div>
+        <div className="text-red-500 mb-4">{error}</div>
       )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 bg-gray-900">
-        {/* Carte 1 : Nombre de classes */}
         <Card>
           <CardHeader>
             <CardTitle>Classes</CardTitle>
@@ -73,13 +67,10 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold">
               {classesCount !== null ? classesCount : "Chargement..."}
             </p>
-            <p className="text-sm text-muted-foreground">
-              Nombre total de classes
-            </p>
+            <p className="text-sm text-muted-foreground">Nombre total de classes</p>
           </CardContent>
         </Card>
 
-        {/* Carte 2 : Nombre d'examens */}
         <Card>
           <CardHeader>
             <CardTitle>Examens</CardTitle>
@@ -88,13 +79,10 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold">
               {examsCount !== null ? examsCount : "Chargement..."}
             </p>
-            <p className="text-sm text-muted-foreground">
-              Nombre total d'examens
-            </p>
+            <p className="text-sm text-muted-foreground">Nombre total d'examens</p>
           </CardContent>
         </Card>
 
-        {/* Carte 3 : Nombre d'élèves */}
         <Card>
           <CardHeader>
             <CardTitle>Élèves</CardTitle>
@@ -103,26 +91,22 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold">
               {studentsCount !== null ? studentsCount : "Chargement..."}
             </p>
-            <p className="text-sm text-muted-foreground">
-              Nombre total d'élèves
-            </p>
+            <p className="text-sm text-muted-foreground">Nombre total d'élèves</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Graphique */}
       <div className="mt-6">
         <Card className="col-span-4 bg-gray-900">
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
+            <CardTitle className="text-white">Distribution des notes</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
-            <BarChartVertical />
+            <BarChartVertical data={notesDistributions.map((dist) => dist.note)} />
           </CardContent>
         </Card>
       </div>
 
-      {/* Bouton d'action */}
       <div className="mt-6 flex justify-center items-center">
         <Button className="bg-amber-50 text-black">Download Report</Button>
       </div>
