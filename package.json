@@ -45,6 +45,7 @@
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.1",
     "resend": "^4.1.2",
+    "sonner": "^2.0.3",
     "tailwind-merge": "^3.0.2",
     "tis": "^0.3.5",
     "tls": "^0.0.1"

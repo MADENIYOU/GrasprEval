@@ -1,36 +1,32 @@
-// @ts-nocheck
+//@ts-nocheck
+
 "use client";
 import React, { useEffect, useState, CSSProperties } from "react";
 import { scaleBand, scaleLinear, max } from "d3";
 
-export function BarChartVertical({ data }: { data: { key: string; value: number }[][] }) {
-  const [datasets, setDatasets] = useState(data);
-  const [currentIndex, setCurrentIndex] = useState(0);
+export function BarChartVertical({ data }: { data: { note: string; nombre_etudiants: number }[] }) {
+  const [chartData, setChartData] = useState(data);
 
   useEffect(() => {
-    setDatasets(data);
+    setChartData(data);
   }, [data]);
 
-  useEffect(() => {
-    if (datasets.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % datasets.length);
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [datasets]);
+  if (chartData.length === 0) return <p>Aucune donnée à afficher pour le moment !</p>;
 
-  if (datasets.length === 0) return <p>Chargement des données...</p>;
+  // Transformation des données 'note' en objet
+  const transformedData = chartData.map((d) => ({
+    ...d,
+    note: typeof d.note === "string" ? JSON.parse(d.note) : d.note, // Parser uniquement si c'est une chaîne JSON
+  }));
 
-  const currentData = datasets[currentIndex];
-
+  // xScale et yScale restent inchangés
   const xScale = scaleBand()
-    .domain(currentData.map((d) => d.key))
+    .domain(Object.keys(transformedData[0]?.note || {}))  // Utilisation des clés des notes comme labels
     .range([0, 100])
     .padding(0.3);
 
   const yScale = scaleLinear()
-    .domain([0, max(currentData.map((d) => d.value)) ?? 0])
+    .domain([0, max(transformedData.map((d) => d.nombre_etudiants)) ?? 0])
     .range([100, 0]);
 
   return (
@@ -45,6 +41,7 @@ export function BarChartVertical({ data }: { data: { key: string; value: number 
         } as CSSProperties
       }
     >
+      {/* Axe Y - valeurs */}
       <div className="relative h-[calc(100%-var(--marginTop)-var(--marginBottom))] w-[var(--marginLeft)] translate-y-[var(--marginTop)] overflow-visible">
         {yScale.ticks(8).map((value, i) => (
           <div
@@ -57,49 +54,48 @@ export function BarChartVertical({ data }: { data: { key: string; value: number 
         ))}
       </div>
 
+      {/* Lignes et barres */}
       <div className="absolute inset-0 h-[calc(100%-var(--marginTop)-var(--marginBottom))] w-[calc(100%-var(--marginLeft)-var(--marginRight))] translate-x-[var(--marginLeft)] translate-y-[var(--marginTop)] overflow-visible">
-        <svg viewBox="0 0 100 100" className="overflow-visible w-full h-full" preserveAspectRatio="none">
-          {yScale.ticks(8).map((active, i) => (
-            <g key={i} transform={`translate(0,${yScale(active)})`} className="text-gray-300/80">
-              <line x1={0} x2={100} stroke="currentColor" strokeDasharray="6,5" strokeWidth={0.5} vectorEffect="non-scaling-stroke" />
-            </g>
-          ))}
-        </svg>
+        {yScale.ticks(8).map((active, i) => (
+          <div key={i} style={{ top: `${yScale(active)}%` }} className="absolute w-full h-px bg-gray-300/80" />
+        ))}
 
-        {currentData.map((entry, i) => {
-          const xPosition = xScale(entry.key)! + xScale.bandwidth() / 2;
-          return (
-            <div
-              key={i}
-              className="absolute overflow-visible text-gray-400"
-              style={{
-                left: `${xPosition}%`,
-                top: "100%",
-                transform: "rotate(45deg) translateX(4px) translateY(8px)",
-              }}
-            >
-              <div className="absolute text-xs -translate-y-1/2 whitespace-nowrap">
-                {entry.key}
-              </div>
-            </div>
-          );
+        {transformedData.map((d, index) => {
+          const noteEntries = Object.entries(d.note); // Récupère les paires [note, count]
+          return noteEntries.map(([note, count], subIndex) => {
+            const barWidth = xScale.bandwidth();
+            const barHeight = yScale(0) - yScale(count); // Hauteur basée sur le nombre d'étudiants
+            const xPosition = xScale(note);
+
+            return (
+              <div
+                key={`${index}-${subIndex}`} // Utiliser un key unique par barre
+                className="absolute bottom-0 bg-gradient-to-b from-green-500 to-blue-400 transition-all duration-1000 ease-in-out"
+                style={{
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  left: `${xPosition}%`,
+                  borderRadius: "6px 6px 0 0",
+                }}
+              />
+            );
+          });
         })}
+      </div>
 
-        {currentData.map((d, index) => {
-          const barWidth = xScale.bandwidth();
-          const barHeight = yScale(0) - yScale(d.value);
+      {/* Axe X - notes */}
+      <div className="absolute w-full bottom-0 flex justify-between translate-y-1">
+        {transformedData[0]?.note && Object.keys(transformedData[0]?.note).map((note, index) => {
+          const xPosition = xScale(note);
 
           return (
             <div
               key={index}
-              style={{
-                width: `${barWidth}%`,
-                height: `${barHeight}%`,
-                borderRadius: "6px 6px 0 0",
-                marginLeft: `${xScale(d.key)}%`,
-              }}
-              className="absolute bottom-0 bg-gradient-to-b from-yellow-500 to-blue-400 transition-all duration-1000 ease-in-out"
-            />
+              className="absolute w-full text-center"
+              style={{ left: `${xPosition}%`, width: `${xScale.bandwidth()}%` }}
+            >
+              <div className="text-xs text-gray-600">{note}</div>
+            </div>
           );
         })}
       </div>
