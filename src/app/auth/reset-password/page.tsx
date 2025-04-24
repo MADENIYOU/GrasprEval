@@ -2,20 +2,48 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { useRouter } from 'next/navigation';
 
 export default function ResetPasswordPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [step, setStep] = useState(1); // Étape 1 = saisie code, 2 = nouveau mot de passe
+  const [step, setStep] = useState(1);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const router = useRouter();
+
+  useEffect(() => {
+    const urlEmail = searchParams.get('email');
+    const urlCode = searchParams.get('code');
+
+    if (urlEmail && urlCode) {
+      setEmail(urlEmail);
+      setCode(urlCode);
+      autoVerify(urlEmail, urlCode);
+    }
+  }, [searchParams]);
+
+  const autoVerify = async (email: string, code: string) => {
+    const res = await fetch('/api/auth/verify-code', {
+      method: 'POST',
+      body: JSON.stringify({ email, code }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (res.ok) {
+      setStep(2);
+    } else {
+      const data = await res.json();
+      setError(data.error || 'Code invalide.');
+    }
+  };
 
   const verifyCode = async () => {
     setError('');
@@ -96,15 +124,15 @@ export default function ResetPasswordPage() {
 
         {error && (
           <Alert variant="destructive" className="mt-4 w-full">
-            <AlertTitle>Erreur</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertTitle className='text-red-600'>Erreur</AlertTitle>
+            <AlertDescription className='text-red-600'>{error}</AlertDescription>
           </Alert>
         )}
 
         {success && (
           <Alert variant="success" className="mt-4 w-full">
-            <AlertTitle>Succès</AlertTitle>
-            <AlertDescription>{success}</AlertDescription>
+            <AlertTitle className='text-green-600'>Succès</AlertTitle>
+            <AlertDescription className='text-green-600'>{success}</AlertDescription>
           </Alert>
         )}
       </div>

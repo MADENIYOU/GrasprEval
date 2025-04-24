@@ -33,8 +33,8 @@ export function Chart({ statistics, currentExamId }: { statistics: Statistic[]; 
   const arcs = pieLayout(data);
 
   const colors = {
-    gray: "fill-[#e0e0e0] dark:fill-zinc-700",
-    purple: "fill-violet-600 dark:fill-violet-500",
+    gray: "fill-red-600 dark:fill-red-700",
+    purple: "fill-green-600 dark:fill-green-500",
   };
 
   return (

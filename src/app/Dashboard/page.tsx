@@ -45,7 +45,7 @@ export default function DashboardPage() {
         .then((data) => {
           setExams(data);
           if (data.length > 0) {
-            setSelectedExamId(data[0].id); // Uniquement le premier examen affiché
+            setSelectedExamId(data[0].id);
           }
           setLoading(false);
         })

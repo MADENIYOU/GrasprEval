@@ -31,7 +31,7 @@ export default function AuthPage() {
         redirect: false,
       });
 
-      if (res?.ok) router.push("/");
+      if (res?.ok) router.push("/Dashboard");
       else setError("Identifiants incorrects");
 
     } else {
