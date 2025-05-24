@@ -75,7 +75,6 @@ Commentaire: [commentaire détaillé]
     );
 
     const responseText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    console.log("Réponse brute de Gemini:", responseText);
 
     if (!responseText) {
       throw new Error("Aucune réponse reçue de Gemini.");

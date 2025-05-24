@@ -23,7 +23,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.mot_de_passe) {
-          return null; // Pas d'email ou mot de passe, retourne null
+          return null;
         }
 
         try {

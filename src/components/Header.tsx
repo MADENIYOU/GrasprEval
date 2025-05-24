@@ -20,7 +20,7 @@ const Header: React.FC = () => {
             <a href="/Correction">Correction</a>
           </li>
           <li className="text-gray-200">
-            <a href="https://chat-delta-rose.vercel.app/chat">ChatBot</a>
+            <a href="#">ChatBot</a>
           </li>
         </ul>
       </nav>
